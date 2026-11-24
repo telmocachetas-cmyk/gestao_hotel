@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar do Mar — Gestão Hoteleira</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <header class="hotel-header">
+        <div class="container header-content">
+            <a class="hotel-logo" href="#quartos" aria-label="Solar do Mar - início">
+                <span class="logo-mark" aria-hidden="true">☼</span>
+                <span class="logo-text"><strong>Solar do Mar</strong><small>HOTEL & SPA · PORTIMÃO</small></span>
+            </a>
+            <div class="header-meta"><span class="header-live-dot"></span> Sistema de gestão <span class="header-divider">|</span> <span id="headerRoomsCount">8</span> quartos</div>
+            <nav class="main-nav" aria-label="Navegação principal">
+                <a class="nav-link active" href="#quartos">Quartos</a>
+                <a class="nav-link" href="#reservas">Reservas</a>
+                <a class="nav-link" href="#nova-reserva">Nova reserva</a>
+                <a class="nav-link" href="#dashboard">Dashboard</a>
+                <a class="nav-link" href="#galeria">Hotel</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Indicador visual da tab ativa -->
+    <div class="tab-indicator">
+        <div class="container">
+            <p class="eyebrow">SOLAR DO MAR <span>/</span> <span id="currentTabKicker">OPERAÇÕES</span></p>
+            <h2 id="currentTabTitle">Gestão de Quartos</h2>
+            <p id="currentTabDescription">Visualize e gerencie todos os quartos do hotel</p>
+        </div>
+    </div>
+
+    <div class="container main-container">
+        <!-- Conteúdo das tabs -->
+        <div class="tab-content">
+            <!-- Tab 1: Lista de Quartos -->
+            <div class="tab-pane fade show active" id="quartos">
+                <div class="card glass-card">
+                    <div class="card-header gradient-header">
+                        <h4 class="mb-0"><i class="bi bi-door-closed"></i> Gestão de Quartos</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filtros com design moderno -->
+                        <div class="filter-section">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <div class="filter-group">
+                                        <label for="filterRoomType" class="filter-label">
+                                            <i class="bi bi-funnel"></i> Tipo de Quarto
+                                        </label>
+                                        <select id="filterRoomType" class="form-select filter-select">
+                                            <option value="todos">Todos os tipos</option>
+                                            <option value="single">Single</option>
+                                            <option value="double">Double</option>
+                                            <option value="suite">Suite</option>
+                                            <option value="familia">Família</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="filter-group">
+                                        <label for="filterStatus" class="filter-label">
+                                            <i class="bi bi-info-circle"></i> Estado
+                                        </label>
+                                        <select id="filterStatus" class="form-select filter-select">
+                                            <option value="todos">Todos os estados</option>
+                                            <option value="disponivel">Disponível</option>
+                                            <option value="ocupado">Ocupado</option>
+                                            <option value="manutencao">Em manutenção</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button class="btn btn-primary btn-filter" onclick="filterRooms()">
+                                        <i class="bi bi-search"></i> Filtrar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de quartos -->
+                        <div class="rooms-grid" id="roomsList">
+                            <!-- Quartos serão carregados aqui -->
+                        </div>
+
+                        <!-- Ações -->
+                        <div class="action-buttons mt-4">
+                            <button class="btn btn-success btn-action" onclick="addSampleRoom()">
+                                <i class="bi bi-plus-lg"></i> Adicionar Quarto
+                            </button>
+                            <button class="btn btn-info btn-action" onclick="loadRooms()">
+                                <i class="bi bi-arrow-clockwise"></i> Atualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Lista de Reservas -->
+            <div class="tab-pane fade" id="reservas">
+                <div class="card glass-card">
+                    <div class="card-header gradient-header">
+                        <h4 class="mb-0"><i class="bi bi-calendar-check"></i> Reservas e Tarifas</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-hover reservations-table">
+                                <thead>
+                                    <tr>
+                                        <th><i class="bi bi-hash"></i> ID</th>
+                                        <th><i class="bi bi-door-closed"></i> Quarto</th>
+                                        <th><i class="bi bi-person"></i> Cliente</th>
+                                        <th><i class="bi bi-calendar-plus"></i> Check-in</th>
+                                        <th><i class="bi bi-calendar-minus"></i> Check-out</th>
+                                        <th><i class="bi bi-cash"></i> Preço</th>
+                                        <th><i class="bi bi-info-circle"></i> Estado</th>
+                                        <th><i class="bi bi-gear"></i> Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reservationsTable">
+                                    <!-- Reservas serão carregadas aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Informação de tarifas -->
+                        <div class="tarifas-info mt-4">
+                            <h5><i class="bi bi-tags"></i> Sistema de Tarifas 2025</h5>
+                            <div class="tarifas-grid">
+                                <div class="tarifa-card alta">
+                                    <h6>Alta Temporada</h6>
+                                    <p class="price">+50%</p>
+                                    <p class="months">Jun, Jul, Ago, Dez</p>
+                                </div>
+                                <div class="tarifa-card normal">
+                                    <h6>Temporada Normal</h6>
+                                    <p class="price">Preço Base</p>
+                                    <p class="months">Mar, Abr, Mai, Set, Out</p>
+                                </div>
+                                <div class="tarifa-card baixa">
+                                    <h6>Baixa Temporada</h6>
+                                    <p class="price">-20%</p>
+                                    <p class="months">Jan, Fev, Nov</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Nova Reserva -->
+            <div class="tab-pane fade" id="nova-reserva">
+                <div class="card glass-card">
+                    <div class="card-header gradient-header">
+                        <h4 class="mb-0"><i class="bi bi-calendar-plus"></i> Nova Reserva</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="reservation-form">
+                            <div class="row">
+                                <!-- Coluna esquerda -->
+                                <div class="col-lg-6">
+                                    <div class="form-section">
+                                        <h5><i class="bi bi-geo-alt"></i> Seleção do Quarto</h5>
+                                        <div class="mb-3">
+                                            <label for="roomSelect" class="form-label">Quarto:</label>
+                                            <select id="roomSelect" class="form-select form-select-lg">
+                                                <!-- Opções serão carregadas -->
+                                            </select>
+                                        </div>
+                                        
+                                        <h5 class="mt-4"><i class="bi bi-person"></i> Dados do Cliente</h5>
+                                        <div class="mb-3">
+                                            <label for="clientName" class="form-label">Nome Completo:</label>
+                                            <input type="text" class="form-control" id="clientName" placeholder="Ex: João Silva">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="clientEmail" class="form-label">Email:</label>
+                                            <input type="email" class="form-control" id="clientEmail" placeholder="Ex: joao@email.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Coluna direita -->
+                                <div class="col-lg-6">
+                                    <div class="form-section">
+                                        <h5><i class="bi bi-calendar-event"></i> Datas da Estadia</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="checkInDate" class="form-label">Check-in:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-box-arrow-in-right"></i></span>
+                                                    <input type="date" class="form-control" id="checkInDate" min="2025-01-01" max="2025-12-31">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="checkOutDate" class="form-label">Check-out:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-box-arrow-left"></i></span>
+                                                    <input type="date" class="form-control" id="checkOutDate" min="2025-01-01" max="2025-12-31">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Preço estimado -->
+                                        <div class="price-estimate-section">
+                                            <h5><i class="bi bi-calculator"></i> Preço Estimado</h5>
+                                            <div class="price-display" id="priceEstimate">
+                                                <div class="price-placeholder">
+                                                    <i class="bi bi-clock"></i>
+                                                    <p>Selecione um quarto e datas</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Botões de ação -->
+                                        <div class="reservation-actions mt-4">
+                                            <button class="btn btn-success btn-lg btn-reserve" onclick="makeReservation()">
+                                                <i class="bi bi-check-circle"></i> Confirmar Reserva
+                                            </button>
+                                            <button class="btn btn-outline-secondary btn-lg" onclick="clearReservationForm()">
+                                                <i class="bi bi-x-circle"></i> Limpar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mensagem de status -->
+                            <div id="reservationMessage" class="mt-4"></div>
+                            
+                            <!-- Calendário de visualização -->
+                            <div class="calendar-preview mt-5">
+                                <h5 id="miniCalendarTitle">Disponibilidade</h5>
+                                <div class="calendar-grid" id="miniCalendar">
+                                    <!-- Calendário será gerado aqui -->
+                                </div>
+                                <div class="calendar-legend">
+                                    <span class="legend-item"><span class="legend-box livre"></span> Livre</span>
+                                    <span class="legend-item"><span class="legend-box ocupado"></span> Ocupado</span>
+                                    <span class="legend-item"><span class="legend-box reservado"></span> Reservado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Dashboard -->
+            <div class="tab-pane fade" id="dashboard">
+                <div class="dashboard-intro">
+                    <div><p class="eyebrow">CENTRO DE CONTROLO</p><h2>Visão geral do hotel</h2><p>Acompanhe a operação, reservas e desempenho num só lugar.</p></div>
+                    <div class="dashboard-tools"><label for="dashYear">Ano</label><select id="dashYear" class="form-select" aria-label="Filtrar dashboard por ano"></select><button class="btn btn-outline-primary" id="refreshDashboard" type="button">↻ Atualizar</button><button class="btn btn-primary" id="exportDashboard" type="button">↓ Exportar CSV</button></div>
+                </div>
+                <div class="dashboard-grid">
+                    <!-- Estatísticas principais -->
+                    <div class="dashboard-card large">
+                        <div class="card-heading"><div><p class="eyebrow">RESUMO DO ANO</p><h3>Indicadores principais</h3></div><span class="live-label"><span class="header-live-dot"></span> Dados atualizados</span></div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <article class="stat-card primary"><div class="stat-icon">▦</div><div class="stat-content"><p>Quartos no hotel</p><h3 id="totalRooms">0</h3><small id="roomAvailability">—</small></div></article>
+                                <article class="stat-card success"><div class="stat-icon">⌂</div><div class="stat-content"><p>Quartos ocupados</p><h3 id="occupiedRooms">0</h3><small id="occupancySummary">—</small></div></article>
+                                <article class="stat-card warning"><div class="stat-icon">▣</div><div class="stat-content"><p>Reservas ativas</p><h3 id="totalReservations">0</h3><small id="reservationSummary">No ano selecionado</small></div></article>
+                                <article class="stat-card info"><div class="stat-icon">€</div><div class="stat-content"><p>Receita confirmada</p><h3 id="yearRevenue">0 €</h3><small id="revenueSummary">No ano selecionado</small></div></article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos -->
+                    <div class="dashboard-card">
+                        <div class="card-heading"><div><p class="eyebrow">ALOJAMENTO</p><h3>Ocupação mensal</h3></div><span class="chart-unit">%</span></div>
+                        <div class="card-body"><div class="chart-container"><canvas id="occupancyChart" role="img" aria-label="Gráfico de ocupação mensal"></canvas></div><div class="chart-legend"><span><i class="legend-dot occupancy-dot"></i> Taxa de ocupação</span></div></div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-heading"><div><p class="eyebrow">DESEMPENHO</p><h3>Receita mensal</h3></div><span class="chart-unit">€</span></div>
+                        <div class="card-body"><div class="chart-container"><canvas id="revenueChart" role="img" aria-label="Gráfico de receita mensal"></canvas></div><div class="chart-legend"><span><i class="legend-dot revenue-dot"></i> Receita confirmada</span></div></div>
+                    </div>
+
+                    <!-- Reservas recentes -->
+                    <div class="dashboard-card large">
+                        <div class="card-heading"><div><p class="eyebrow">ATIVIDADE</p><h3>Reservas recentes</h3></div><a class="text-link" href="#reservas">Ver todas <span aria-hidden="true">→</span></a></div>
+                        <div class="card-body">
+                            <div class="recent-reservations table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Hóspede</th><th>Quarto</th><th>Estadia</th><th>Estado</th><th class="text-end">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentReservations">
+                                        <tr><td colspan="5" class="empty-state">A carregar reservas…</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações de gestão -->
+                    <div class="dashboard-card">
+                        <div class="card-heading"><div><p class="eyebrow">OPERAÇÃO</p><h3>Estado dos quartos</h3></div></div>
+                        <div class="card-body">
+                            <div class="room-status-summary"><div class="room-status-track"><span id="occupiedBar"></span><span id="availableBar"></span><span id="maintenanceBar"></span></div>
+                            <div class="room-status-legend"><span><i class="legend-dot occupied-dot"></i>Ocupados <b id="occupiedCount">0</b></span><span><i class="legend-dot available-dot"></i>Disponíveis <b id="availableCount">0</b></span><span><i class="legend-dot maintenance-dot"></i>Manutenção <b id="maintenanceCount">0</b></span></div></div>
+                            <div class="management-metrics"><div class="metric"><div class="metric-label">Noites reservadas</div><div class="metric-value" id="daysBooked">0</div></div><div class="metric"><div class="metric-label">Ocupação média</div><div class="metric-value" id="occupancyRate">0%</div></div><div class="metric"><div class="metric-label">Receita / noite</div><div class="metric-value" id="avgRevenue">0 €</div></div><div class="metric"><div class="metric-label">Cancelamentos</div><div class="metric-value" id="cancellations">0</div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card large">
+                        <div class="card-heading"><div><p class="eyebrow">TENDÊNCIA</p><h3>Receita ao longo do ano</h3></div><span class="chart-unit">Resumo mensal</span></div>
+                        <div class="card-body"><div id="managementInfo" class="revenue-breakdown" aria-live="polite"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Galeria (NOVA) -->
+            <div class="tab-pane fade" id="galeria">
+                <div class="gallery-container">
+                    <!-- Hotel Info -->
+                    <div class="card glass-card mb-4">
+                        <div class="card-header gradient-header">
+                            <h4><i class="bi bi-info-circle"></i> Sobre o Solar do Mar</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="hotel-info">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h3>Solar do Mar Hotel & SPA</h3>
+                                        <p class="lead">Um refúgio à beira-mar onde o conforto encontra a natureza</p>
+                                        <p>Localizado na costa algarvia, o Solar do Mar oferece uma experiência única com quartos temáticos, SPA completo e restaurante gourmet com vista para o oceano. Fundado em 1995, mantemos a tradição da hospitalidade portuguesa com o conforto moderno.</p>
+                                        
+                                        <div class="features">
+                                            <h5><i class="bi bi-stars"></i> Destaques</h5>
+                                            <div class="features-grid">
+                                                <span class="feature-item"><i class="bi bi-wifi"></i> Wi-Fi Grátis</span>
+                                                <span class="feature-item"><i class="bi bi-umbrella"></i> Piscina Exterior</span>
+                                                <span class="feature-item"><i class="bi bi-cup-hot"></i> Pequeno-almoço</span>
+                                                <span class="feature-item"><i class="bi bi-car-front"></i> Estacionamento</span>
+                                                <span class="feature-item"><i class="bi bi-water"></i> SPA Completo</span>
+                                                <span class="feature-item"><i class="bi bi-bicycle"></i> Atividades</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-info">
+                                            <h5><i class="bi bi-geo-alt"></i> Contactos</h5>
+                                            <p><i class="bi bi-geo"></i> Praia da Rocha, 8500 Portimão</p>
+                                            <p><i class="bi bi-telephone"></i> +351 282 123 456</p>
+                                            <p><i class="bi bi-envelope"></i> info@solardomar.pt</p>
+                                            <p><i class="bi bi-globe"></i> www.solardomar.pt</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Galeria de Imagens -->
+                    <div class="card glass-card">
+                        <div class="card-header gradient-header">
+                            <h4><i class="bi bi-images"></i> Galeria do Hotel</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="gallery-grid">
+                                <!-- Imagem 1: Fachada -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #4a90e2;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-building"></i>
+                                            <p>Fachada do Hotel</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>Fachada Principal</h6>
+                                        <p>Arquitetura mediterrânica com vista para o mar</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Imagem 2: Quarto Suite -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #50c878;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-bed"></i>
+                                            <p>Suite Premium</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>Suite Premium</h6>
+                                        <p>Varanda privada com vista para o oceano</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Imagem 3: Piscina -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #1e90ff;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-water"></i>
+                                            <p>Área da Piscina</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>Piscina Infinita</h6>
+                                        <p>Piscina exterior com vista panorâmica</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Imagem 4: Restaurante -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #ff7f50;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-egg-fried"></i>
+                                            <p>Restaurante</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>Restaurante Maré</h6>
+                                        <p>Culinária mediterrânica com produtos locais</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Imagem 5: SPA -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #9370db;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-flower1"></i>
+                                            <p>Área do SPA</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>SPA Oceano</h6>
+                                        <p>Tratamentos relaxantes com algas marinhas</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Imagem 6: Localização -->
+                                <div class="gallery-item">
+                                    <div class="gallery-img" style="background-color: #20b2aa;">
+                                        <div class="img-placeholder">
+                                            <i class="bi bi-geo"></i>
+                                            <p>Localização</p>
+                                        </div>
+                                    </div>
+                                    <div class="gallery-caption">
+                                        <h6>Vista da Praia</h6>
+                                        <p>Localização privilegiada na Praia da Rocha</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="hotel-footer">
+        <div class="container footer-content"><a class="hotel-logo footer-logo" href="#quartos"><span class="logo-mark" aria-hidden="true">☼</span><span class="logo-text"><strong>Solar do Mar</strong><small>HOTEL & SPA</small></span></a><p>© <span id="footerYear">2026</span> Solar do Mar. Gestão feita com cuidado.</p><a href="#dashboard">Voltar ao dashboard ↑</a></div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/quartos.js"></script>
+    <script src="js/reservas.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/galeria.js"></script>
+</body>
+</html>
